@@ -1,10 +1,10 @@
-# 🎓 CV Builder Pro - Plantilla Harvard
+# 🎓 CVListo - Plantilla Harvard
 
 [![GitHub Pages](https://img.shields.io/badge/deploy-GitHub%20Pages-brightgreen)](https://NicoBar2.github.io/harvard-cv-builder/)
 [![React](https://img.shields.io/badge/built%20with-React-61DAFB)](https://reactjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/styled%20with-Tailwind%20CSS-38B2AC)](https://tailwindcss.com/)
 
-**CV Builder Pro** es una herramienta web moderna y gratuita diseñada para ayudar a estudiantes y profesionales a crear currículums de alto impacto siguiendo el estándar académico de **Harvard**.
+**CVListo** es una herramienta web moderna y gratuita diseñada para ayudar a estudiantes y profesionales a crear currículums de alto impacto siguiendo el estándar académico de **Harvard**.
 
 🚀 **¡Pruébalo ahora!**: [https://NicoBar2.github.io/harvard-cv-builder/](https://NicoBar2.github.io/harvard-cv-builder/)
 

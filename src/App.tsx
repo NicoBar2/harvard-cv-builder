@@ -133,7 +133,7 @@ function App() {
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-3">
             <img src="/harvard-cv-builder/logo.svg" alt="Logo" className="w-10 h-10 shadow-indigo-500/20 shadow-lg rounded-xl" />
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-rose-500 bg-clip-text text-transparent">CV Builder</h1>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-rose-500 bg-clip-text text-transparent tracking-tight">CVListo</h1>
           </div>
           <button
             onClick={() => setDarkMode(!darkMode)}
