@@ -123,12 +123,12 @@ function App() {
       <aside className={`w-full md:w-[450px] shrink-0 p-10 shadow-2xl overflow-y-auto max-h-screen no-print ${darkMode ? 'bg-slate-800 border-r border-slate-700' : 'bg-white'} transition-all duration-300`}>
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-3">
-            <img src="/harvard-cv-builder/logo.svg" alt="Logo" className="w-10 h-10 shadow-lg rounded-lg" />
-            <h1 className="text-2xl font-bold">CV Builder</h1>
+            <img src="/harvard-cv-builder/logo.svg" alt="Logo" className="w-10 h-10 shadow-indigo-500/20 shadow-lg rounded-xl" />
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-rose-500 bg-clip-text text-transparent">CV Builder</h1>
           </div>
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className={`p-2 rounded-full transition-colors ${darkMode ? 'bg-slate-700 text-yellow-400 hover:bg-slate-600' : 'bg-slate-200 text-slate-600 hover:bg-slate-300'}`}
+            className={`p-2 rounded-xl transition-all ${darkMode ? 'bg-slate-700 text-yellow-400 hover:bg-slate-600' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
             title={darkMode ? "Modo Claro" : "Modo Oscuro"}
           >
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
@@ -137,10 +137,10 @@ function App() {
         
         {/* Personal Info */}
         <section className="mb-8">
-          <h2 className={`text-sm font-semibold uppercase tracking-wider mb-4 border-b pb-2 ${darkMode ? 'text-slate-400 border-slate-700' : 'text-slate-500 border-slate-200'}`}>Información Personal</h2>
+          <h2 className={`text-xs font-bold uppercase tracking-[0.2em] mb-4 border-b pb-2 ${darkMode ? 'text-indigo-400 border-slate-700' : 'text-indigo-600 border-slate-100'}`}>Información Personal</h2>
           <div className="space-y-3">
             <input
-              className={`w-full p-2 border rounded text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-colors ${darkMode ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' : 'bg-white border-slate-200'}`}
+              className={`w-full p-3 border rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${darkMode ? 'bg-slate-700/50 border-slate-600 text-white placeholder-slate-400' : 'bg-white border-slate-200 shadow-sm hover:border-indigo-300'}`}
               placeholder="Nombre Completo"
               name="fullName"
               value={cvData.personalInfo.fullName}
@@ -668,7 +668,7 @@ function App() {
         <div className="flex flex-col gap-3 mb-8">
           <button
             onClick={downloadPDF}
-            className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-all font-semibold shadow-lg hover:shadow-blue-500/30 active:scale-95"
+            className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white py-3 px-4 rounded-xl hover:bg-indigo-700 transition-all font-semibold shadow-lg shadow-indigo-500/25 active:scale-95"
           >
             <Download size={20} />
             Descargar PDF
@@ -677,7 +677,7 @@ function App() {
           <button
             onClick={downloadWord}
             disabled={isWordDownloading}
-            className="w-full flex items-center justify-center gap-2 bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 transition-all font-semibold shadow-lg hover:shadow-emerald-500/30 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 bg-slate-800 text-white py-3 px-4 rounded-xl hover:bg-slate-900 transition-all font-semibold shadow-lg shadow-slate-500/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed border border-slate-700"
           >
             {isWordDownloading ? (
               <>
