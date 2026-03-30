@@ -132,8 +132,8 @@ function App() {
       <aside className={`w-full md:w-[450px] shrink-0 p-10 shadow-2xl overflow-y-auto max-h-screen no-print ${darkMode ? 'bg-slate-800 border-r border-slate-700' : 'bg-white'} transition-all duration-300`}>
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-3">
-            <img src="/harvard-cv-builder/logo.svg" alt="Logo" className="w-10 h-10 shadow-indigo-500/20 shadow-lg rounded-xl" />
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-rose-500 bg-clip-text text-transparent tracking-tight">CVListo</h1>
+            <img src="/harvard-cv-builder/logo.svg" alt="Logo" className="w-10 h-10 shadow-blue-500/20 shadow-lg rounded-xl" />
+            <h1 className={`text-2xl font-bold tracking-tight ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>CVListo</h1>
           </div>
           <button
             onClick={() => setDarkMode(!darkMode)}
