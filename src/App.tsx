@@ -122,7 +122,10 @@ function App() {
       {/* Editor Sidebar */}
       <aside className={`w-full md:w-[450px] shrink-0 p-10 shadow-2xl overflow-y-auto max-h-screen no-print ${darkMode ? 'bg-slate-800 border-r border-slate-700' : 'bg-white'} transition-all duration-300`}>
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold">CV Builder</h1>
+          <div className="flex items-center gap-3">
+            <img src="/harvard-cv-builder/logo.svg" alt="Logo" className="w-10 h-10 shadow-lg rounded-lg" />
+            <h1 className="text-2xl font-bold">CV Builder</h1>
+          </div>
           <button
             onClick={() => setDarkMode(!darkMode)}
             className={`p-2 rounded-full transition-colors ${darkMode ? 'bg-slate-700 text-yellow-400 hover:bg-slate-600' : 'bg-slate-200 text-slate-600 hover:bg-slate-300'}`}

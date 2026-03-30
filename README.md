@@ -59,4 +59,4 @@ Este proyecto ha sido optimizado con:
 - Estructura semántica HTML5.
 
 ---
-Creado con ❤️ por [NicoBar2](https://github.com/NicoBar2)
+
