@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CVData } from './types/cv';
 import HarvardTemplate from './templates/HarvardTemplate';
-import { Download, Plus, Trash2, Sun, Moon, Loader2, FileText } from 'lucide-react';
+import ModernTemplate from './templates/ModernTemplate';
+import { Download, Plus, Trash2, Sun, Moon, Loader2, FileText, Layout } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { generateWord } from './utils/wordGenerator';
@@ -79,6 +80,14 @@ function App() {
   });
 
   const [isWordDownloading, setIsWordDownloading] = useState(false);
+  const [activeTemplate, setActiveTemplate] = useState<'harvard' | 'modern'>(() => {
+    const saved = localStorage.getItem('active-template');
+    return (saved as 'harvard' | 'modern') || 'harvard';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('active-template', activeTemplate);
+  }, [activeTemplate]);
 
   useEffect(() => {
     localStorage.setItem('cv-data', JSON.stringify(cvData));
@@ -134,6 +143,31 @@ function App() {
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
         </div>
+
+        {/* Template Selector */}
+        <section className="mb-8">
+          <h2 className={`text-xs font-bold uppercase tracking-[0.2em] mb-4 border-b pb-2 ${darkMode ? 'text-indigo-400 border-slate-700' : 'text-indigo-600 border-slate-100'}`}>Estilo de CV</h2>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              onClick={() => setActiveTemplate('harvard')}
+              className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all ${activeTemplate === 'harvard' 
+                ? 'border-indigo-500 bg-indigo-500/10 text-indigo-500' 
+                : (darkMode ? 'border-slate-700 bg-slate-700/30 text-slate-400' : 'border-slate-200 bg-white text-slate-500 hover:border-indigo-300')}`}
+            >
+              <Layout size={20} />
+              <span className="text-[10px] font-bold uppercase tracking-wider">Harvard</span>
+            </button>
+            <button
+              onClick={() => setActiveTemplate('modern')}
+              className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all ${activeTemplate === 'modern' 
+                ? 'border-rose-500 bg-rose-500/10 text-rose-500' 
+                : (darkMode ? 'border-slate-700 bg-slate-700/30 text-slate-400' : 'border-slate-200 bg-white text-slate-500 hover:border-rose-300')}`}
+            >
+              <Layout size={20} className="rotate-90" />
+              <span className="text-[10px] font-bold uppercase tracking-wider">Moderno</span>
+            </button>
+          </div>
+        </section>
         
         {/* Personal Info */}
         <section className="mb-8">
@@ -698,9 +732,15 @@ function App() {
       <main className={`flex-1 p-8 md:p-12 flex justify-center overflow-y-auto transition-colors duration-300 ${darkMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
         <div 
           ref={cvRef}
-          className="bg-white shadow-2xl w-full max-w-[210mm] min-h-[297mm] p-[25mm] origin-top transition-all print-container"
+          className="bg-white shadow-2xl w-full max-w-[210mm] min-h-[297mm] origin-top transition-all print-container overflow-hidden"
         >
-          <HarvardTemplate data={cvData} />
+          {activeTemplate === 'harvard' ? (
+            <div className="p-[25mm]">
+              <HarvardTemplate data={cvData} />
+            </div>
+          ) : (
+            <ModernTemplate data={cvData} />
+          )}
         </div>
       </main>
     </div>
