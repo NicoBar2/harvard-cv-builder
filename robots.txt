@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://NicoBar2.github.io/harvard-cv-builder/sitemap.xml
