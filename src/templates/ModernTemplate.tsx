@@ -8,6 +8,27 @@ interface Props {
 const ModernTemplate: React.FC<Props> = ({ data }) => {
   const { personalInfo, education, experience, projects, certifications, skills } = data;
 
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return '';
+    const [year, month] = dateStr.split('-');
+    const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun",
+      "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+    ];
+    return `${monthNames[parseInt(month) - 1]} ${year}`;
+  };
+
+  const getDateRange = (item: { startDate?: string, endDate?: string, isCurrent?: boolean, dates?: string }) => {
+    if (item.dates && item.dates.trim() !== '') {
+      return item.dates;
+    }
+    if (item.startDate) {
+      const start = formatDate(item.startDate);
+      const end = item.isCurrent ? 'Pres.' : formatDate(item.endDate);
+      return `${start} - ${end}`;
+    }
+    return '';
+  };
+
   return (
     <div className="font-sans text-[#2d3748] flex min-h-[297mm]">
       {/* Left Column (Sidebar) */}
@@ -26,6 +47,7 @@ const ModernTemplate: React.FC<Props> = ({ data }) => {
             <p>{personalInfo.phone}</p>
             <p className="break-all">{personalInfo.email}</p>
             {personalInfo.linkedin && <p className="break-all text-xs opacity-75">{personalInfo.linkedin}</p>}
+            {personalInfo.website && <p className="break-all text-xs opacity-75">{personalInfo.website}</p>}
           </div>
         </section>
 
@@ -75,7 +97,7 @@ const ModernTemplate: React.FC<Props> = ({ data }) => {
               <div key={exp.id}>
                 <div className="flex justify-between items-baseline mb-1">
                   <h3 className="text-lg font-bold text-slate-800">{exp.position}</h3>
-                  <span className="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded">{exp.dates}</span>
+                  <span className="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded">{getDateRange(exp)}</span>
                 </div>
                 <p className="text-sm font-bold text-slate-500 mb-3">{exp.company} • {exp.location}</p>
                 <ul className="space-y-2">
@@ -101,10 +123,10 @@ const ModernTemplate: React.FC<Props> = ({ data }) => {
             {education.map((edu) => (
               <div key={edu.id}>
                 <div className="flex justify-between items-baseline mb-1">
-                  <h3 className="text-base font-bold text-slate-800">{edu.degree}</h3>
-                  <span className="text-xs text-slate-400 font-medium">{edu.dates}</span>
+                  <h3 className="text-lg font-bold text-slate-800">{edu.school}</h3>
+                  <span className="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded">{getDateRange(edu)}</span>
                 </div>
-                <p className="text-sm text-slate-500">{edu.school} • {edu.location}</p>
+                <p className="text-sm italic text-slate-600 mb-2">{edu.degree} • {edu.location}</p>
               </div>
             ))}
           </div>

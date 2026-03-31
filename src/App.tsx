@@ -14,7 +14,8 @@ const emptyData: CVData = {
     phone: "",
     location: "",
     linkedin: "",
-    github: ""
+    github: "",
+    website: ""
   },
   education: [],
   experience: [],
@@ -213,6 +214,13 @@ function App() {
               value={cvData.personalInfo.github}
               onChange={handlePersonalInfoChange}
             />
+            <input
+              className={`w-full p-2 border rounded text-sm transition-colors ${darkMode ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' : 'bg-white border-slate-200'}`}
+              placeholder="Web/Portafolio/Otra (ej. tuweb.com)"
+              name="website"
+              value={cvData.personalInfo.website}
+              onChange={handlePersonalInfoChange}
+            />
           </div>
         </section>
 
@@ -222,7 +230,7 @@ function App() {
             <h2 className={`text-sm font-semibold uppercase tracking-wider ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Educación</h2>
             <button 
               onClick={() => {
-                const newEdu = { id: Date.now().toString(), school: '', degree: '', location: '', dates: '', details: [] };
+                const newEdu = { id: Date.now().toString(), school: '', degree: '', location: '', startDate: '', endDate: '', isCurrent: false, dates: '', details: [] };
                 setCvData(prev => ({ ...prev, education: [...prev.education, newEdu] }));
               }}
               className="text-blue-500 hover:text-blue-400"
@@ -258,9 +266,9 @@ function App() {
                   setCvData({ ...cvData, education: newEdu });
                 }}
               />
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2">
                 <input
-                  className={`w-1/2 p-1 text-xs border-b border-transparent focus:border-blue-400 outline-none bg-transparent ${darkMode ? 'text-slate-400' : ''}`}
+                  className={`w-full p-1 text-xs border-b border-transparent focus:border-blue-400 outline-none bg-transparent ${darkMode ? 'text-slate-400' : ''}`}
                   placeholder="Ubicación"
                   value={edu.location}
                   onChange={(e) => {
@@ -269,16 +277,66 @@ function App() {
                     setCvData({ ...cvData, education: newEdu });
                   }}
                 />
-                <input
-                  className={`w-1/2 p-1 text-xs border-b border-transparent focus:border-blue-400 outline-none bg-transparent ${darkMode ? 'text-slate-400' : ''}`}
-                  placeholder="Fechas (ej. 2018 - 2022)"
-                  value={edu.dates}
-                  onChange={(e) => {
-                    const newEdu = [...cvData.education];
-                    newEdu[index].dates = e.target.value;
-                    setCvData({ ...cvData, education: newEdu });
-                  }}
-                />
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2 items-center">
+                    <div className="flex flex-col w-1/2">
+                      <label className="text-[10px] uppercase tracking-wider opacity-50 mb-1">Inicio (Calendario)</label>
+                      <input
+                        type="month"
+                        className={`p-1 text-xs border rounded outline-none ${darkMode ? 'bg-slate-800 border-slate-600 text-slate-300' : 'bg-white border-slate-200 text-slate-600'}`}
+                        value={edu.startDate || ''}
+                        onChange={(e) => {
+                          const newEdu = [...cvData.education];
+                          newEdu[index].startDate = e.target.value;
+                          setCvData({ ...cvData, education: newEdu });
+                        }}
+                      />
+                    </div>
+                    {!edu.isCurrent && (
+                      <div className="flex flex-col w-1/2">
+                        <label className="text-[10px] uppercase tracking-wider opacity-50 mb-1">Fin (Calendario)</label>
+                        <input
+                          type="month"
+                          className={`p-1 text-xs border rounded outline-none ${darkMode ? 'bg-slate-800 border-slate-600 text-slate-300' : 'bg-white border-slate-200 text-slate-600'}`}
+                          value={edu.endDate || ''}
+                          onChange={(e) => {
+                            const newEdu = [...cvData.education];
+                            newEdu[index].endDate = e.target.value;
+                            setCvData({ ...cvData, education: newEdu });
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex flex-col">
+                    <label className="text-[10px] uppercase tracking-wider opacity-50 mb-1">O escribe manual (ej: "2018 - 2022")</label>
+                    <input
+                      className={`w-full p-1 text-xs border-b border-transparent focus:border-blue-400 outline-none bg-transparent ${darkMode ? 'text-slate-400' : ''}`}
+                      placeholder="Sobrescribir fechas manualmente"
+                      value={edu.dates}
+                      onChange={(e) => {
+                        const newEdu = [...cvData.education];
+                        newEdu[index].dates = e.target.value;
+                        setCvData({ ...cvData, education: newEdu });
+                      }}
+                    />
+                  </div>
+                </div>
+                <label className="flex items-center gap-2 mt-1 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="rounded border-slate-300 text-blue-500 focus:ring-blue-500"
+                    checked={edu.isCurrent || false}
+                    onChange={(e) => {
+                      const newEdu = [...cvData.education];
+                      newEdu[index].isCurrent = e.target.checked;
+                      if (e.target.checked) newEdu[index].endDate = '';
+                      setCvData({ ...cvData, education: newEdu });
+                    }}
+                  />
+                  <span className="text-xs opacity-70">Actualmente estudiando aquí</span>
+                </label>
               </div>
             </div>
           ))}
@@ -290,7 +348,7 @@ function App() {
             <h2 className={`text-sm font-semibold uppercase tracking-wider ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Experiencia</h2>
             <button 
               onClick={() => {
-                const newExp = { id: Date.now().toString(), company: '', position: '', location: '', dates: '', details: [''] };
+                const newExp = { id: Date.now().toString(), company: '', position: '', location: '', startDate: '', endDate: '', isCurrent: false, dates: '', details: [''] };
                 setCvData(prev => ({ ...prev, experience: [...prev.experience, newExp] }));
               }}
               className="text-blue-500 hover:text-blue-400"
@@ -326,9 +384,9 @@ function App() {
                   setCvData({ ...cvData, experience: newExp });
                 }}
               />
-              <div className="flex gap-2 mb-2">
+              <div className="flex flex-col gap-2 mb-2">
                 <input
-                  className={`w-1/2 p-1 text-xs border-b border-transparent focus:border-blue-400 outline-none bg-transparent ${darkMode ? 'text-slate-400' : ''}`}
+                  className={`w-full p-1 text-xs border-b border-transparent focus:border-blue-400 outline-none bg-transparent ${darkMode ? 'text-slate-400' : ''}`}
                   placeholder="Ubicación"
                   value={exp.location}
                   onChange={(e) => {
@@ -337,17 +395,68 @@ function App() {
                     setCvData({ ...cvData, experience: newExp });
                   }}
                 />
-                <input
-                  className={`w-1/2 p-1 text-xs border-b border-transparent focus:border-blue-400 outline-none bg-transparent ${darkMode ? 'text-slate-400' : ''}`}
-                  placeholder="Fechas"
-                  value={exp.dates}
-                  onChange={(e) => {
-                    const newExp = [...cvData.experience];
-                    newExp[index].dates = e.target.value;
-                    setCvData({ ...cvData, experience: newExp });
-                  }}
-                />
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2 items-center">
+                    <div className="flex flex-col w-1/2">
+                      <label className="text-[10px] uppercase tracking-wider opacity-50 mb-1">Inicio (Calendario)</label>
+                      <input
+                        type="month"
+                        className={`p-1 text-xs border rounded outline-none ${darkMode ? 'bg-slate-800 border-slate-600 text-slate-300' : 'bg-white border-slate-200 text-slate-600'}`}
+                        value={exp.startDate || ''}
+                        onChange={(e) => {
+                          const newExp = [...cvData.experience];
+                          newExp[index].startDate = e.target.value;
+                          setCvData({ ...cvData, experience: newExp });
+                        }}
+                      />
+                    </div>
+                    {!exp.isCurrent && (
+                      <div className="flex flex-col w-1/2">
+                        <label className="text-[10px] uppercase tracking-wider opacity-50 mb-1">Fin (Calendario)</label>
+                        <input
+                          type="month"
+                          className={`p-1 text-xs border rounded outline-none ${darkMode ? 'bg-slate-800 border-slate-600 text-slate-300' : 'bg-white border-slate-200 text-slate-600'}`}
+                          value={exp.endDate || ''}
+                          onChange={(e) => {
+                            const newExp = [...cvData.experience];
+                            newExp[index].endDate = e.target.value;
+                            setCvData({ ...cvData, experience: newExp });
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex flex-col">
+                    <label className="text-[10px] uppercase tracking-wider opacity-50 mb-1">O escribe manual (ej: "2018 - Presente")</label>
+                    <input
+                      className={`w-full p-1 text-xs border-b border-transparent focus:border-blue-400 outline-none bg-transparent ${darkMode ? 'text-slate-400' : ''}`}
+                      placeholder="Sobrescribir fechas manualmente"
+                      value={exp.dates}
+                      onChange={(e) => {
+                        const newExp = [...cvData.experience];
+                        newExp[index].dates = e.target.value;
+                        setCvData({ ...cvData, experience: newExp });
+                      }}
+                    />
+                  </div>
+                </div>
+                <label className="flex items-center gap-2 mt-1 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="rounded border-slate-300 text-blue-500 focus:ring-blue-500"
+                    checked={exp.isCurrent || false}
+                    onChange={(e) => {
+                      const newExp = [...cvData.experience];
+                      newExp[index].isCurrent = e.target.checked;
+                      if (e.target.checked) newExp[index].endDate = '';
+                      setCvData({ ...cvData, experience: newExp });
+                    }}
+                  />
+                  <span className="text-xs opacity-70">Trabajo actualmente aquí</span>
+                </label>
               </div>
+
               <div className="space-y-1">
                 {exp.details.map((detail, dIdx) => (
                   <input

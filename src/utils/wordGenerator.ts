@@ -5,6 +5,24 @@ import { CVData } from '../types/cv';
 export const generateWord = async (data: CVData) => {
   const { personalInfo, education, experience, projects, certifications, volunteering, publications, skills } = data;
 
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return '';
+    const [year, month] = dateStr.split('-');
+    const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    return `${monthNames[parseInt(month) - 1]} ${year}`;
+  };
+
+  const getDateRange = (item: { startDate?: string, endDate?: string, isCurrent?: boolean, dates?: string }) => {
+    if (item.startDate) {
+      const start = formatDate(item.startDate);
+      const end = item.isCurrent ? 'Presente' : formatDate(item.endDate);
+      return `${start} – ${end}`;
+    }
+    return item.dates || '';
+  };
+
   const doc = new Document({
     sections: [{
       properties: {
@@ -39,6 +57,7 @@ export const generateWord = async (data: CVData) => {
             }),
             personalInfo.linkedin ? new TextRun({ text: ` | ${personalInfo.linkedin}`, size: 20 }) : new TextRun(""),
             personalInfo.github ? new TextRun({ text: ` | ${personalInfo.github}`, size: 20 }) : new TextRun(""),
+            personalInfo.website ? new TextRun({ text: ` | ${personalInfo.website}`, size: 20 }) : new TextRun(""),
           ],
         }),
 
@@ -60,7 +79,7 @@ export const generateWord = async (data: CVData) => {
           new Paragraph({
             children: [
               new TextRun({ text: edu.degree, italics: true }),
-              new TextRun({ text: `\t${edu.dates}`, italics: false }),
+              new TextRun({ text: `\t${getDateRange(edu)}`, italics: false }),
             ],
             tabStops: [{ type: "right", position: 9000 }],
           }),
@@ -92,7 +111,7 @@ export const generateWord = async (data: CVData) => {
           new Paragraph({
             children: [
               new TextRun({ text: exp.position, italics: true }),
-              new TextRun({ text: `\t${exp.dates}`, italics: false }),
+              new TextRun({ text: `\t${getDateRange(exp)}`, italics: false }),
             ],
             tabStops: [{ type: "right", position: 9000 }],
           }),

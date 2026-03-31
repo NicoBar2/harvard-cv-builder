@@ -17,6 +17,27 @@ const HarvardTemplate: React.FC<Props> = ({ data }) => {
     skills 
   } = data;
 
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return '';
+    const [year, month] = dateStr.split('-');
+    const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    return `${monthNames[parseInt(month) - 1]} ${year}`;
+  };
+
+  const getDateRange = (item: { startDate?: string, endDate?: string, isCurrent?: boolean, dates?: string }) => {
+    if (item.dates && item.dates.trim() !== '') {
+      return item.dates;
+    }
+    if (item.startDate) {
+      const start = formatDate(item.startDate);
+      const end = item.isCurrent ? 'Presente' : formatDate(item.endDate);
+      return `${start} – ${end}`;
+    }
+    return '';
+  };
+
   return (
     <div className="harvard-font text-[11pt] leading-relaxed text-[#1a1a1a]">
       {/* Header */}
@@ -42,6 +63,12 @@ const HarvardTemplate: React.FC<Props> = ({ data }) => {
               <span>{personalInfo.github}</span>
             </>
           )}
+          {personalInfo.website && (
+            <>
+              <span className="hidden sm:inline">•</span>
+              <span>{personalInfo.website}</span>
+            </>
+          )}
         </div>
       </header>
 
@@ -56,7 +83,7 @@ const HarvardTemplate: React.FC<Props> = ({ data }) => {
             </div>
             <div className="flex justify-between items-baseline italic">
               <span>{edu.degree}</span>
-              <span className="font-normal not-italic text-sm">{edu.dates}</span>
+              <span className="font-normal not-italic text-sm">{getDateRange(edu)}</span>
             </div>
             {edu.details && edu.details.length > 0 && (
               <ul className="list-disc ml-5 mt-1 space-y-0.5 text-[10.5pt]">
@@ -80,7 +107,7 @@ const HarvardTemplate: React.FC<Props> = ({ data }) => {
             </div>
             <div className="flex justify-between items-baseline italic">
               <span>{exp.position}</span>
-              <span className="font-normal not-italic text-sm">{exp.dates}</span>
+              <span className="font-normal not-italic text-sm">{getDateRange(exp)}</span>
             </div>
             <ul className="list-disc ml-5 mt-1 space-y-0.5 text-[10.5pt]">
               {exp.details.map((detail, idx) => (

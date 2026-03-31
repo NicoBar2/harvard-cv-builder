@@ -3,6 +3,9 @@ export interface Education {
   school: string;
   degree: string;
   location: string;
+  startDate?: string;
+  endDate?: string;
+  isCurrent?: boolean;
   dates: string;
   details?: string[];
 }
@@ -12,6 +15,9 @@ export interface Experience {
   company: string;
   position: string;
   location: string;
+  startDate?: string;
+  endDate?: string;
+  isCurrent?: boolean;
   dates: string;
   details: string[];
 }
@@ -22,6 +28,9 @@ export interface Project {
   description: string;
   technologies?: string[];
   link?: string;
+  startDate?: string;
+  endDate?: string;
+  isCurrent?: boolean;
   dates?: string;
 }
 
@@ -63,6 +72,7 @@ export interface CVData {
     location: string;
     linkedin?: string;
     github?: string;
+    website?: string;
   };
   education: Education[];
   experience: Experience[];
