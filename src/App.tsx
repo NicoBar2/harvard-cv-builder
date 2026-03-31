@@ -7,72 +7,59 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { generateWord } from './utils/wordGenerator';
 
-const initialData: CVData = {
+const emptyData: CVData = {
   personalInfo: {
-    fullName: "JUAN PÉREZ",
-    email: "juan.perez@email.com",
-    phone: "555-0123",
-    location: "Ciudad de México, México",
-    linkedin: "linkedin.com/in/juanperez",
-    github: "github.com/juanperez"
+    fullName: "",
+    email: "",
+    phone: "",
+    location: "",
+    linkedin: "",
+    github: ""
   },
-  education: [
-    {
-      id: '1',
-      school: "Universidad Nacional Autónoma de México",
-      degree: "Licenciatura en Ingeniería en Computación",
-      location: "CDMX",
-      dates: "2018 – 2022",
-      details: ["Mención Honorífica", "Promedio: 9.5/10"]
-    }
-  ],
-  experience: [
-    {
-      id: '1',
-      company: "Tech Solutions Inc.",
-      position: "Ingeniero de Software Senior",
-      location: "Remoto",
-      dates: "2022 – Presente",
-      details: [
-        "Liderazgo del equipo de desarrollo backend para una plataforma escalable",
-        "Optimización de consultas SQL resultando en una mejora del 40% en tiempos de respuesta",
-        "Implementación de arquitectura de microservicios utilizando Node.js y Docker"
-      ]
-    }
-  ],
-  projects: [
-    {
-      id: '1',
-      name: "Sistema de Gestión de Inventarios",
-      description: "Desarrollo de una aplicación web para el control de stock en tiempo real.",
-      technologies: ["React", "Firebase", "Tailwind CSS"],
-      link: "github.com/juanperez/inventario",
-      dates: "2023"
-    }
-  ],
-  certifications: [
-    {
-      id: '1',
-      name: "AWS Certified Solutions Architect",
-      issuer: "Amazon Web Services",
-      date: "2023"
-    }
-  ],
+  education: [],
+  experience: [],
+  projects: [],
+  certifications: [],
   volunteering: [],
   publications: [],
   skills: {
-    languages: ["Español (Nativo)", "Inglés (C1)"],
-    technical: ["React", "Node.js", "TypeScript", "PostgreSQL", "AWS"],
-    interests: ["Inteligencia Artificial", "Ciclismo", "Lectura de Ciencia Ficción"]
+    languages: [],
+    technical: [],
+    interests: []
   }
 };
+
+const initialData: CVData = emptyData;
 
 function App() {
   const cvRef = useRef<HTMLDivElement>(null);
   const [cvData, setCvData] = useState<CVData>(() => {
     const saved = localStorage.getItem('cv-data');
-    return saved ? JSON.parse(saved) : initialData;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        // Si el nombre es Juan Pérez o el email es el de ejemplo, forzamos vacío
+        if (
+          parsed.personalInfo?.fullName === "JUAN PÉREZ" || 
+          parsed.personalInfo?.email === "juan.perez@email.com"
+        ) {
+          localStorage.removeItem('cv-data'); // Limpiamos el storage de una vez
+          return emptyData;
+        }
+        return parsed;
+      } catch (e) {
+        return emptyData;
+      }
+    }
+    return emptyData;
   });
+
+  const handleClearAll = () => {
+    if (window.confirm('¿Estás seguro de que deseas borrar todos los datos del CV?')) {
+      setCvData(emptyData);
+      localStorage.removeItem('cv-data');
+    }
+  };
 
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('dark-mode');
@@ -137,13 +124,22 @@ function App() {
             </div>
             <h1 className={`text-2xl font-bold tracking-tight ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>CVListo</h1>
           </div>
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className={`p-2 rounded-xl transition-all ${darkMode ? 'bg-slate-700 text-yellow-400 hover:bg-slate-600' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-            title={darkMode ? "Modo Claro" : "Modo Oscuro"}
-          >
-            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleClearAll}
+              className={`p-2 rounded-xl transition-all ${darkMode ? 'bg-slate-700 text-red-400 hover:bg-red-500/10' : 'bg-slate-100 text-slate-600 hover:bg-red-50 hover:text-red-500'}`}
+              title="Borrar todo"
+            >
+              <Trash2 size={20} />
+            </button>
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className={`p-2 rounded-xl transition-all ${darkMode ? 'bg-slate-700 text-yellow-400 hover:bg-slate-600' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+              title={darkMode ? "Modo Claro" : "Modo Oscuro"}
+            >
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+          </div>
         </div>
 
         {/* Template Selector */}
@@ -201,6 +197,20 @@ function App() {
               placeholder="Ubicación"
               name="location"
               value={cvData.personalInfo.location}
+              onChange={handlePersonalInfoChange}
+            />
+            <input
+              className={`w-full p-2 border rounded text-sm transition-colors ${darkMode ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' : 'bg-white border-slate-200'}`}
+              placeholder="LinkedIn (ej. linkedin.com/in/tuusuario)"
+              name="linkedin"
+              value={cvData.personalInfo.linkedin}
+              onChange={handlePersonalInfoChange}
+            />
+            <input
+              className={`w-full p-2 border rounded text-sm transition-colors ${darkMode ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' : 'bg-white border-slate-200'}`}
+              placeholder="GitHub (ej. github.com/tuusuario)"
+              name="github"
+              value={cvData.personalInfo.github}
               onChange={handlePersonalInfoChange}
             />
           </div>
